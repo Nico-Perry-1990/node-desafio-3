@@ -33,14 +33,23 @@ function App() {
 
   // este método se utilizará en el siguiente desafío
   const like = async (id) => {
-    await axios.put(urlBaseServer + `/posts/like/${id}`);
+  try {
+    // Fíjate bien: se usan ` ` (backticks) para que ${id} funcione
+    await axios.put(`${urlBaseServer}/posts/like/${id}`);
     getPosts();
+  } catch (error) {
+    console.error("Error en la llamada PUT:", error);
+  }
   };
 
   // este método se utilizará en el siguiente desafío
   const eliminarPost = async (id) => {
-    await axios.delete(urlBaseServer + `/posts/${id}`);
+  try {
+    await axios.delete(`${urlBaseServer}/posts/${id}`);
     getPosts();
+  } catch (error) {
+    console.error("Error en la llamada DELETE:", error);
+  }
   };
 
   useEffect(() => {
@@ -57,12 +66,15 @@ function App() {
             setImgSRC={setImgSRC}
             setDescripcion={setDescripcion}
             agregarPost={agregarPost}
+            titulo={titulo}
+            imgSrc={imgSrc}
+            descripcion={descripcion}
           />
         </div>
         <div className="col-12 col-sm-8 px-5 row posts align-items-start">
-          {posts.map((post, i) => (
+          {posts.map((post) => (
             <Post
-              key={i}
+              key={post.id}
               post={post}
               like={like}
               eliminarPost={eliminarPost}
